@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- DATA TABLE -->
+        <h3 class="title-5 m-b-35">Latest Movies </h3>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2">
+                <thead>
+                {% if check %}
+                <tr>
+                    <th>Movie_name</th>
+                    <th>Director</th>
+                    <th>Genre</th>
+                    <th>Release Date</th>
+                    <th>Average Rating</th>
+                    <th>Collections(in Crores.)</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                {% for movie,directors,rating,genres in movies  %}
+                <tr class="tr-shadow">
+               
+                    <td class="desc">
+                        <a href="/imdb/movie/{{movie.pk}}/">{{movie.name}}</a>
+                    </td>
+                    <td class="desc">
+                     
+                        {% for director in directors %}
+                         <a href="/imdb/director/{{director.id}}/"> {{ director.name }} </a><br>
+                        {% endfor %}
+                    </td>
+                        
+                    <td>
+                    {% for genre in genres %}
+                    {{genre.type}},
+                    {% endfor %}
+                    </td>
+                    <td>{{movie.release_date}}</td>
+                    <td>
+                        <span class="status--high">{{movie.average_rating}}</span>
+                    </td>
+                    <td>₹{{movie.collections}}Cr</td>
+                    <td>
+                        <div class="table-data-feature">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type='hidden' name='movie' value='{{movie.id}}'>
+                                <button type="submit"
+                                        class="item"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="spacer"></tr>
+
+                {% endfor %}
+                {% else %}
+                No Data Available
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+{% endblock %}
